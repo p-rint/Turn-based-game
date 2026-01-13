@@ -1,0 +1,164 @@
+[gd_scene load_steps=14 format=3 uid="uid://p40uw65rnuht"]
+
+[ext_resource type="Script" uid="uid://ckrc6rcns4n2p" path="res://GameScript.gd" id="1_glv2v"]
+[ext_resource type="Script" uid="uid://baai5j2yafv42" path="res://player.gd" id="2_cm0pq"]
+[ext_resource type="Script" uid="uid://b68uc1cej1t06" path="res://Ui.gd" id="2_uu6xs"]
+[ext_resource type="Script" uid="uid://c6rxeuxyd6npq" path="res://camera_3d.gd" id="3_3dxm6"]
+[ext_resource type="Script" uid="uid://b07xe78c2fpbr" path="res://enemy.gd" id="3_fos0i"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_rxg2q"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_glv2v"]
+sky_material = SubResource("ProceduralSkyMaterial_rxg2q")
+
+[sub_resource type="Environment" id="Environment_uu6xs"]
+background_mode = 2
+sky = SubResource("Sky_glv2v")
+tonemap_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_rxg2q"]
+
+[sub_resource type="Animation" id="Animation_glv2v"]
+resource_name = "pow"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character:rotation")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.102202035, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.9128072, 0, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_uu6xs"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_r0du0"]
+_data = {
+&"RESET": SubResource("Animation_uu6xs"),
+&"pow": SubResource("Animation_glv2v")
+}
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_uu6xs"]
+viewport_path = NodePath("Game/Enemies/Enemy/Healthbar/SubViewport")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_uu6xs")
+
+[node name="Map" type="CSGCombiner3D" parent="."]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Map"]
+size = Vector3(16, 1, 16)
+
+[node name="Game" type="Node3D" parent="."]
+script = ExtResource("1_glv2v")
+
+[node name="Player" type="CharacterBody3D" parent="Game"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 6)
+script = ExtResource("2_cm0pq")
+
+[node name="Character" type="Node3D" parent="Game/Player"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Game/Player/Character"]
+transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("BoxMesh_rxg2q")
+skeleton = NodePath("../..")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Game/Player"]
+libraries = {
+&"": SubResource("AnimationLibrary_r0du0")
+}
+
+[node name="Camera3D" type="Camera3D" parent="Game"]
+transform = Transform3D(0.940573, 0, 0.33959165, 0, 1, 0, -0.33959165, 0, 0.940573, 2.4397326, 4.4471927, 7.7229037)
+script = ExtResource("3_3dxm6")
+
+[node name="Enemies" type="Node3D" parent="Game"]
+
+[node name="Enemy" type="CharacterBody3D" parent="Game/Enemies"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, -4.5)
+script = ExtResource("3_fos0i")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Game/Enemies/Enemy"]
+transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("BoxMesh_rxg2q")
+skeleton = NodePath("")
+
+[node name="Healthbar" type="Sprite3D" parent="Game/Enemies/Enemy"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+texture = SubResource("ViewportTexture_uu6xs")
+
+[node name="SubViewport" type="SubViewport" parent="Game/Enemies/Enemy/Healthbar"]
+size = Vector2i(300, 50)
+
+[node name="Label" type="Label" parent="Game/Enemies/Enemy/Healthbar/SubViewport"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -172.0
+offset_top = -34.5
+offset_right = 172.0
+offset_bottom = 34.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 50
+text = "AFejbfenfiwfw"
+
+[node name="ProgressBar" type="ProgressBar" parent="Game/Enemies/Enemy/Healthbar/SubViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 50
+value = 50.0
+
+[node name="Timers" type="Node" parent="Game"]
+
+[node name="EnemyAttack" type="Timer" parent="Game/Timers"]
+one_shot = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+script = ExtResource("2_uu6xs")
+
+[node name="Turn" type="Label" parent="CanvasLayer"]
+offset_right = 544.0
+offset_bottom = 277.0
+theme_override_font_sizes/font_size = 100
+text = "Your turn
+"
+
+[node name="Health" type="Label" parent="CanvasLayer"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -137.0
+offset_right = 544.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 100
+text = "Health = 100"
+
+[connection signal="timeout" from="Game/Timers/EnemyAttack" to="Game" method="_on_enemy_attack_timeout"]
