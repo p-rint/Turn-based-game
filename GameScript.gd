@@ -21,12 +21,18 @@ var eneStartPos
 
 @onready var enemyAttackTimer: Timer = $Timers/EnemyAttack
 
+var targetEnemy : CharacterBody3D
+
+@onready var enemies: Node3D = $Enemies
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
 	plr1StartPos = plr1.position
 	plr2StartPos = plr2.position
-	eneStartPos = testEnemy.position
+	targetEnemy = testEnemy
+	eneStartPos = targetEnemy.position
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -34,7 +40,9 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("Attack"):
 		requestAttack(0)
-			
+	
+	if Input.is_action_just_pressed("Swap"):
+		chooseEnemy()
 			
 	if plr1Turn:
 		$"../CanvasLayer/Turn".text = "P1 turn"
@@ -44,9 +52,12 @@ func _process(delta: float) -> void:
 		$"../CanvasLayer/Turn".text = "Their turn"
 	
 	
+func chooseEnemy():
+	var allEnemies = enemies.get_children()
 	
-	
-
+	targetEnemy = allEnemies.pick_random()
+	eneStartPos = targetEnemy.position
+	print("NEW TARGET: " + targetEnemy.name)
 
 
 
@@ -55,7 +66,7 @@ func _process(delta: float) -> void:
 func plr1Attack() -> void: #Run attack stuff, then enable ene atk timer
 	plr1Turn = false
 	print("Player Attack")
-	damage(testEnemy)
+	damage(targetEnemy)
 	plr1AnimPlr.stop()
 	plr1AnimPlr.play("Attack1")
 	plr1.move()
@@ -65,7 +76,7 @@ func plr1Attack() -> void: #Run attack stuff, then enable ene atk timer
 func plr2Attack() -> void: #Run attack stuff, then enable ene atk timer
 	plr2Turn = false
 	print("Player Attack")
-	damage(testEnemy)
+	damage(targetEnemy)
 	plr2Move()
 	plr2AnimPlr.stop()
 	plr2AnimPlr.play("pow")
@@ -105,9 +116,9 @@ func eneAttack() -> void: #RUn ene atk stuf then make it plr turn
 	
 func eneMove(plrPos) -> void:
 	var tween = get_tree().create_tween()
-	tween.tween_property(testEnemy, "position", plrPos, .10)
+	tween.tween_property(targetEnemy, "position", plrPos, .10)
 	var tween2 = get_tree().create_tween()
-	tween.tween_property(testEnemy, "position", eneStartPos, .10)
+	tween.tween_property(targetEnemy, "position", targetEnemy.startPos, .10)
 
 #If timer ended and not plr turn, enemy attack
 func _on_enemy_attack_timeout() -> void:
@@ -122,10 +133,11 @@ func damage(guy : CharacterBody3D):
 
 
 func requestAttack(num) -> void:
-	if plr1Turn:
-		plr1.attacks[num].call()
-	elif plr2Turn:
-		plr2.attacks[num].call()
-		enemyAttackTimer.start(.8)
+	if targetEnemy:
+		if plr1Turn:
+			plr1.attacks[num].call()
+		elif plr2Turn:
+			plr2.attacks[num].call()
+			enemyAttackTimer.start(.8)
 	
 	

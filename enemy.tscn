@@ -1,0 +1,48 @@
+[gd_scene load_steps=4 format=3 uid="uid://p5ibnh2pwos1"]
+
+[ext_resource type="Script" uid="uid://b07xe78c2fpbr" path="res://enemy.gd" id="1_7k104"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_rxg2q"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_uu6xs"]
+viewport_path = NodePath("Healthbar/SubViewport")
+
+[node name="Enemy" type="CharacterBody3D"]
+script = ExtResource("1_7k104")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("BoxMesh_rxg2q")
+skeleton = NodePath("")
+
+[node name="Healthbar" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+texture = SubResource("ViewportTexture_uu6xs")
+
+[node name="SubViewport" type="SubViewport" parent="Healthbar"]
+size = Vector2i(300, 50)
+
+[node name="Label" type="Label" parent="Healthbar/SubViewport"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -172.0
+offset_top = -34.5
+offset_right = 172.0
+offset_bottom = 34.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 50
+text = "AFejbfenfiwfw"
+
+[node name="ProgressBar" type="ProgressBar" parent="Healthbar/SubViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 50
+value = 50.0

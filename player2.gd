@@ -22,7 +22,7 @@ func move(speed : float): #Make tween move it to enemy pos and back
 
 func atk1() -> void: #Run attack stuff, then enable ene atk timer
 	GameScript.plr2Turn = false
-	GameScript.damage(GameScript.testEnemy)
+	GameScript.damage(GameScript.targetEnemy)
 	
 	animPlr.stop()
 	animPlr.play("Slash1")
@@ -30,7 +30,7 @@ func atk1() -> void: #Run attack stuff, then enable ene atk timer
 
 func atk2() -> void: #Run attack stuff, then enable ene atk timer
 	GameScript.plr2Turn = false
-	GameScript.damage(GameScript.testEnemy)
+	GameScript.damage(GameScript.targetEnemy)
 	
 	animPlr.stop()
 	animPlr.play("Slash2")
