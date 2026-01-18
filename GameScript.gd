@@ -43,7 +43,7 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed("Swap"):
 		chooseEnemy()
-			
+	
 	if plr1Turn:
 		$"../CanvasLayer/Turn".text = "P1 turn"
 	elif plr2Turn:
@@ -99,18 +99,12 @@ func plr2Move(): #Make tween move it to enemy pos and back
 	
 func eneAttack() -> void: #RUn ene atk stuf then make it plr turn
 	print("Ene Attack")
-	var rand = randi_range(0,1)
-	print(rand)
-	if rand == 0:
-		damage(plr1)
-		eneMove(plr1StartPos)
-		#print("P1: OWWWW")
-	else:
-		damage(plr2)
-		eneMove(plr2StartPos)
-		#print("P2: OWWWW")
+	var ene = enemies.get_children().pick_random()
+	ene.attack()
+	
 	plr1Turn = true
 	plr2Turn = true
+	
 	
 	
 	
@@ -119,6 +113,8 @@ func eneMove(plrPos) -> void:
 	tween.tween_property(targetEnemy, "position", plrPos, .10)
 	var tween2 = get_tree().create_tween()
 	tween.tween_property(targetEnemy, "position", targetEnemy.startPos, .10)
+
+
 
 #If timer ended and not plr turn, enemy attack
 func _on_enemy_attack_timeout() -> void:
