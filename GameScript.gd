@@ -50,6 +50,9 @@ func _process(delta: float) -> void:
 		$"../CanvasLayer/Turn".text = "P2 turn"
 	else: 
 		$"../CanvasLayer/Turn".text = "Their turn"
+		
+	if not targetEnemy and enemies.get_children().size() > 0:
+		chooseEnemy()
 	
 	
 func chooseEnemy():
@@ -66,7 +69,7 @@ func chooseEnemy():
 func plr1Attack() -> void: #Run attack stuff, then enable ene atk timer
 	plr1Turn = false
 	print("Player Attack")
-	damage(targetEnemy)
+	damage(targetEnemy, 20)
 	plr1AnimPlr.stop()
 	plr1AnimPlr.play("Attack1")
 	plr1.move()
@@ -76,7 +79,7 @@ func plr1Attack() -> void: #Run attack stuff, then enable ene atk timer
 func plr2Attack() -> void: #Run attack stuff, then enable ene atk timer
 	plr2Turn = false
 	print("Player Attack")
-	damage(targetEnemy)
+	damage(targetEnemy, 20)
 	plr2Move()
 	plr2AnimPlr.stop()
 	plr2AnimPlr.play("pow")
@@ -123,8 +126,8 @@ func _on_enemy_attack_timeout() -> void:
 	
 	
 
-func damage(guy : CharacterBody3D):
-	guy.health -= 20
+func damage(guy : CharacterBody3D, dmg : int):
+	guy.health -= dmg
 	
 
 

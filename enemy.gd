@@ -34,11 +34,11 @@ func attack() -> void: #RUn ene atk stuf then make it plr turn
 	print("Ene Attack")
 	var rand = randi_range(0,1)
 	if rand == 0:
-		GameScript.damage(plr1)
+		GameScript.damage(plr1, 10)
 		move(GameScript.plr1StartPos, .1)
 		#print("P1: OWWWW")
 	else:
-		GameScript.damage(plr2)
+		GameScript.damage(plr2, 10)
 		move(GameScript.plr2StartPos, .1)
 		#print("P2: OWWWW")
 	GameScript.plr1Turn = true

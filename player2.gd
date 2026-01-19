@@ -6,7 +6,7 @@ extends CharacterBody3D
 
 @onready var animPlr: AnimationPlayer = $AnimationPlayer
 
-var attacks : Array[Callable] = [atk1, atk2]
+var attacks : Array[Callable] = [atk1, atk2, atk3]
 
 
 func _physics_process(delta: float) -> void:
@@ -22,7 +22,7 @@ func move(speed : float): #Make tween move it to enemy pos and back
 
 func atk1() -> void: #Run attack stuff, then enable ene atk timer
 	GameScript.plr2Turn = false
-	GameScript.damage(GameScript.targetEnemy)
+	GameScript.damage(GameScript.targetEnemy, 20)
 	
 	animPlr.stop()
 	animPlr.play("Slash1")
@@ -30,8 +30,16 @@ func atk1() -> void: #Run attack stuff, then enable ene atk timer
 
 func atk2() -> void: #Run attack stuff, then enable ene atk timer
 	GameScript.plr2Turn = false
-	GameScript.damage(GameScript.targetEnemy)
+	GameScript.damage(GameScript.targetEnemy, 30)
 	
 	animPlr.stop()
 	animPlr.play("Slash2")
 	move(.07)
+
+func atk3() -> void: #Run attack stuff, then enable ene atk timer
+	GameScript.plr2Turn = false
+	GameScript.damage(GameScript.targetEnemy, 40)
+	
+	animPlr.stop()
+	animPlr.play("HeavySlash")
+	move(.4)
